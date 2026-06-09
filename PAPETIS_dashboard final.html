@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PAPETIS — Prévisions 2026</title>
+<style>
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+button,select,input{font:inherit}
+
+/* ── Tokens ── */
+:root{
+  --page:#eef2f6;
+  --surface:#ffffff;
+  --surface-muted:#f7f9fc;
+  --panel:#ffffff;
+  --ink:#162033;
+  --muted:#667085;
+  --soft:#98a2b3;
+  --line:#d9e0ea;
+  --line-strong:#c6d0dd;
+  --nav:#17324d;
+  --nav-2:#234762;
+  --accent:#1f7a8c;
+  --accent-dark:#155e6d;
+  --accent-soft:#e6f3f6;
+  --accent2:#b7791f;
+  --accent2-soft:#fff5df;
+  --green:#157347;
+  --red:#b42318;
+  --shadow:0 14px 34px rgba(16,24,40,.08);
+  --radius:8px;
+  --sidebar:300px;
+}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(180deg,#f8fafc 0,#eef2f6 360px,#e8edf3 100%);
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* ── Layout ── */
+.shell{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  background:linear-gradient(180deg,var(--nav) 0%,#10283f 100%);
+  border-right:1px solid rgba(255,255,255,.12);
+  display:flex;flex-direction:column;gap:0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  color:#edf6fb;
+}
+.sb-brand{
+  padding:28px 24px 22px;
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+.sb-logo{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.sb-logo-icon{
+  width:38px;height:38px;border-radius:8px;
+  background:#ffffff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:var(--nav);letter-spacing:-.3px;
+  flex-shrink:0;
+}
+.sb-title{font-size:17px;font-weight:750;color:#ffffff;letter-spacing:.2px}
+.sb-sub{font-size:12px;color:#b9c9d8;margin-top:2px}
+.sb-year-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.20);
+  color:#d7f4fb;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;
+}
+.sb-year-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#77d5e6;display:block;}
+
+.sb-section{padding:18px 24px;border-bottom:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:10px}
+.sb-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#aebfce;margin-bottom:2px}
+
+select,input[type="file"]{
+  width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  border-radius:7px;color:#ffffff;padding:9px 11px;
+  font-size:13px;outline:none;
+  transition:border-color .15s,background .15s;
+  -webkit-appearance:none;appearance:none;
+}
+select:focus,input[type="file"]:focus{border-color:#86d7e7;background:rgba(255,255,255,.12)}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9d7e3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  padding-right:28px;
+}
+select option{background:#ffffff;color:#162033}
+
+.range-wrap{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+input[type="range"]{
+  width:100%;accent-color:#77d5e6;height:4px;
+  background:rgba(255,255,255,.18);border-radius:2px;border:none;outline:none;cursor:pointer;
+}
+output{font-size:12px;font-weight:800;color:#ffffff;min-width:40px;text-align:right}
+
+.import-status{font-size:11px;color:#bdd0de;padding:0 1px}
+
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{
+  padding:10px 11px;border-radius:7px;border:1px solid rgba(255,255,255,.22);
+  background:#ffffff;color:var(--nav);font-size:12px;font-weight:750;
+  cursor:pointer;transition:all .15s;letter-spacing:.1px;
+}
+button:hover{background:#eaf8fb;color:var(--accent-dark);border-color:#89d5e5}
+
+/* ── Workspace ── */
+.workspace{
+  min-width:0;display:flex;flex-direction:column;
+  background:transparent;
+}
+
+/* ── Topbar ── */
+.topbar{
+  background:rgba(255,255,255,.88);border-bottom:1px solid var(--line);
+  padding:22px 34px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);
+}
+.topbar-eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--accent-dark);margin-bottom:4px}
+.topbar-title{font-size:26px;font-weight:760;color:var(--ink);letter-spacing:-.2px;line-height:1.1}
+.topbar-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.model-badge{
+  background:var(--accent-soft);border:1px solid #b7dde5;
+  color:var(--accent-dark);border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;
+}
+#peakMonth{font-size:12px!important;color:var(--muted)!important}
+
+/* ── Content padding ── */
+.content{padding:28px 34px 42px;display:flex;flex-direction:column;gap:20px}
+
+/* ── KPI grid ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;display:flex;flex-direction:column;gap:7px;
+  transition:border-color .2s,transform .2s,box-shadow .2s;
+  box-shadow:0 1px 2px rgba(16,24,40,.04);
+}
+.kpi:hover{border-color:var(--line-strong);box-shadow:var(--shadow);transform:translateY(-1px)}
+.kpi.accent{border-color:#9bd5df;background:linear-gradient(180deg,#f3fbfd 0,#ffffff 100%)}
+.kpi-label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.55px}
+.kpi-value{font-size:28px;font-weight:780;color:var(--ink);letter-spacing:-.4px;line-height:1}
+.kpi-sub{font-size:12px;color:var(--soft)}
+.kpi.accent .kpi-value{color:var(--accent-dark)}
+
+/* ── Dashboard summary ── */
+.dashboard-strip{
+  display:grid;grid-template-columns:1.2fr 1fr 1fr 1.25fr;gap:12px;
+}
+.dash-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 16px;display:flex;flex-direction:column;gap:5px;
+  box-shadow:0 1px 2px rgba(16,24,40,.04);
+}
+.dash-label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.6px}
+.dash-value{font-size:15px;color:var(--ink);font-weight:760;line-height:1.25}
+.dash-note{font-size:12px;color:var(--soft)}
+.dash-card.good{background:#f0fbf6;border-color:#b8e7ce}
+.dash-card.good .dash-value{color:var(--green)}
+
+/* ── Panels ── */
+.panel{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04);
+}
+.panel-head{
+  padding:16px 18px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:linear-gradient(180deg,#ffffff 0,#f8fafc 100%);
+}
+.panel-title{font-size:14px;font-weight:780;color:var(--ink)}
+.panel-meta{font-size:12px;color:var(--muted);font-weight:650}
+.panel-body{padding:18px}
+
+/* ── Chart ── */
+canvas{
+  width:100%;height:360px;display:block;
+  background:#ffffff;border-radius:6px;
+}
+
+/* ── Two-col ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ── Table ── */
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);padding:11px 14px;border-bottom:1px solid var(--line);
+  text-align:right;white-space:nowrap;
+  background:#f8fafc;
+}
+th:first-child{text-align:left}
+td{
+  padding:11px 14px;border-bottom:1px solid #edf1f5;
+  color:var(--ink);text-align:right;font-size:13px;white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+td:first-child{text-align:left;color:var(--muted);font-weight:620}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fbfd}
+
+/* ── Tags ── */
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.tag{
+  background:var(--accent2-soft);border:1px solid #f3d79b;
+  color:#8a5a12;border-radius:999px;padding:5px 10px;
+  font-size:11px;font-weight:600;
+}
+.decision-box{
+  margin-top:12px;padding:12px 14px;border-radius:7px;
+  background:var(--accent-soft);border:1px solid #b7dde5;
+  color:var(--accent-dark);font-size:13px;font-weight:650;line-height:1.55;
+}
+.model-winner{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:92px;border-radius:999px;padding:4px 9px;
+  background:#f0fbf6;border:1px solid #b8e7ce;color:var(--green);
+  font-size:11px;font-weight:800;
+}
+
+/* ── Methodology ── */
+.method-text{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ── Trend badge ── */
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+
+/* ── Responsive ── */
+@media(max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .sidebar{position:static;height:auto}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .dashboard-strip{grid-template-columns:repeat(2,1fr)}
+  .two-col{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .kpi-grid{grid-template-columns:1fr}
+  .dashboard-strip{grid-template-columns:1fr}
+  .content{padding:16px}
+  .topbar{padding:16px;align-items:flex-start;flex-direction:column}
+  .topbar-right{flex-wrap:wrap}
+  .sidebar{border-right:none}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">P</div>
+      <div>
+        <div class="sb-title">PAPETIS</div>
+        <div class="sb-sub">Distribution — Maroc</div>
+      </div>
+    </div>
+    <span class="sb-year-badge">Prévisions 2026</span>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Import données</div>
+    <input id="fileInput" type="file" accept=".csv,.txt"/>
+    <small id="importStatus" class="import-status">Historique 2021–2025 chargé</small>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Famille de produits</div>
+    <select id="familySelect"></select>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Méthode de prévision</div>
+    <select id="methodSelect">
+      <option value="ols">MCO + saisonnalité multiplicative</option>
+      <option value="ma">Moyenne mobile + saisonnalité mult.</option>
+      <option value="exp">Lissage exponentiel + saisonnalité</option>
+    </select>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Modèle saisonnier</div>
+    <select id="modelType">
+      <option value="multiplicative">Multiplicatif — recommandé</option>
+      <option value="additive">Additif — comparatif</option>
+    </select>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Scénario commercial</div>
+    <div class="range-wrap">
+      <input id="scenarioRange" type="range" min="-20" max="20" value="0" step="1"/>
+      <output id="scenarioValue">0 %</output>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="btn-row">
+      <button id="exportCsv">↓ CSV</button>
+      <button id="exportPdf">↓ PDF</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ WORKSPACE ══ -->
+<main class="workspace">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-eyebrow">Tableau de bord prévisionnel</div>
+      <div class="topbar-title" id="viewTitle">Ventes totales</div>
+    </div>
+    <div class="topbar-right">
+      <span class="model-badge" id="recommendation">Modèle multiplicatif</span>
+      <span id="peakMonth"></span>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Réel 2025</div>
+        <div class="kpi-value" id="actual2025">—</div>
+        <div class="kpi-sub">kMAD</div>
+      </div>
+      <div class="kpi accent">
+        <div class="kpi-label">Prévision 2026</div>
+        <div class="kpi-value" id="forecast2026">—</div>
+        <div class="kpi-sub">kMAD</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Évolution</div>
+        <div class="kpi-value" id="growthRate">—</div>
+        <div class="kpi-sub">vs 2025</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Intervalle 90 %</div>
+        <div class="kpi-value" style="font-size:16px;padding-top:5px" id="range2026">—</div>
+        <div class="kpi-sub">kMAD</div>
+      </div>
+    </div>
+
+    <!-- Dashboard summary -->
+    <div class="dashboard-strip">
+      <div class="dash-card good">
+        <div class="dash-label">Données chargées</div>
+        <div class="dash-value" id="loadedRows">—</div>
+        <div class="dash-note">Historique disponible</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Familles étudiées</div>
+        <div class="dash-value" id="familyCount">—</div>
+        <div class="dash-note">Hors total consolidé</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Méthode active</div>
+        <div class="dash-value" id="activeMethod">—</div>
+        <div class="dash-note">Calcul dynamique</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-label">Test saisonnier</div>
+        <div class="dash-value" id="bestSeasonalModel">—</div>
+        <div class="dash-note">Comparaison additif / multiplicatif</div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Série observée et prévisions mensuelles</span>
+        <span class="panel-meta" id="scenarioLabel">Scénario central</span>
+      </div>
+      <div class="panel-body" style="padding:14px 14px 10px">
+        <canvas id="forecastChart" width="1200" height="480"></canvas>
+      </div>
+    </div>
+
+    <!-- Additive vs multiplicative test -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Test de comparaison : modèle additif vs multiplicatif</span>
+        <span class="panel-meta" id="modelTestMeta">Famille active</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Modèle saisonnier</th>
+              <th>RMSE</th>
+              <th>MAPE</th>
+              <th>Écart-type résiduel</th>
+              <th>Décision</th>
+            </tr>
+          </thead>
+          <tbody id="modelComparisonRows"></tbody>
+        </table>
+      </div>
+      <div class="panel-body" style="padding-top:0">
+        <div class="decision-box" id="modelDecision">—</div>
+      </div>
+    </div>
+
+    <!-- Two-col -->
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Comparaison des méthodes</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Méthode</th><th>RMSE</th><th>MAPE</th></tr></thead>
+            <tbody id="errorRows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Saisonnalité & atypies</span></div>
+        <div class="panel-body">
+          <p class="method-text" id="methodologyText"></p>
+          <div id="outliers" class="tags"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly table -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Prévisions mensuelles 2026</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Mois</th>
+              <th>Prévision</th>
+              <th>Bas</th>
+              <th>Haut</th>
+              <th>Coeff. saisonnier</th>
+            </tr>
+          </thead>
+          <tbody id="forecastRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+</div><!-- /shell -->
+
+<script>
+const monthNames = [
+  "janvier",
+  "février",
+  "mars",
+  "avril",
+  "mai",
+  "juin",
+  "juillet",
+  "août",
+  "septembre",
+  "octobre",
+  "novembre",
+  "décembre",
+];
+
+const rawRows = [
+  [2021, 1, 252, 200, 262, 133, 165, 181, 1193],
+  [2021, 2, 198, 183, 254, 120, 122, 157, 1034],
+  [2021, 3, 278, 293, 302, 163, 209, 168, 1413],
+  [2021, 4, 298, 257, 287, 143, 144, 174, 1303],
+  [2021, 5, 303, 289, 262, 176, 171, 146, 1347],
+  [2021, 6, 235, 312, 245, 123, 153, 151, 1219],
+  [2021, 7, 890, 460, 356, 375, 401, 138, 2620],
+  [2021, 8, 2408, 795, 531, 770, 922, 122, 5548],
+  [2021, 9, 2124, 816, 445, 566, 766, 153, 4870],
+  [2021, 10, 622, 531, 383, 322, 409, 193, 2460],
+  [2021, 11, 370, 214, 306, 121, 143, 198, 1352],
+  [2021, 12, 298, 195, 276, 108, 99, 271, 1247],
+  [2022, 1, 295, 245, 291, 155, 168, 201, 1355],
+  [2022, 2, 231, 231, 272, 143, 146, 167, 1190],
+  [2022, 3, 383, 333, 313, 205, 227, 209, 1670],
+  [2022, 4, 327, 281, 292, 150, 193, 181, 1424],
+  [2022, 5, 351, 395, 285, 156, 197, 178, 1562],
+  [2022, 6, 263, 312, 295, 147, 157, 187, 1361],
+  [2022, 7, 920, 546, 379, 406, 415, 162, 2828],
+  [2022, 8, 2368, 923, 545, 798, 1156, 137, 5927],
+  [2022, 9, 2503, 991, 496, 683, 1036, 172, 5881],
+  [2022, 10, 868, 627, 399, 378, 451, 204, 2927],
+  [2022, 11, 372, 261, 335, 141, 179, 211, 1499],
+  [2022, 12, 330, 218, 304, 124, 108, 283, 1367],
+  [2023, 1, 323, 267, 311, 170, 187, 228, 1486],
+  [2023, 2, 270, 241, 295, 155, 154, 205, 1320],
+  [2023, 3, 427, 376, 329, 200, 246, 212, 1790],
+  [2023, 4, 299, 282, 342, 165, 215, 192, 1495],
+  [2023, 5, 390, 422, 316, 180, 230, 187, 1725],
+  [2023, 6, 321, 421, 306, 157, 180, 164, 1549],
+  [2023, 7, 1226, 495, 432, 463, 551, 169, 3336],
+  [2023, 8, 2476, 1081, 626, 923, 1067, 157, 6330],
+  [2023, 9, 2723, 968, 529, 707, 1148, 190, 6265],
+  [2023, 10, 653, 486, 353, 294, 382, 157, 2325],
+  [2023, 11, 423, 265, 371, 128, 171, 214, 1572],
+  [2023, 12, 361, 263, 355, 115, 123, 303, 1520],
+  [2024, 1, 322, 286, 322, 203, 187, 227, 1547],
+  [2024, 2, 280, 274, 332, 154, 168, 224, 1432],
+  [2024, 3, 445, 371, 419, 198, 292, 257, 1982],
+  [2024, 4, 365, 362, 400, 194, 216, 227, 1764],
+  [2024, 5, 411, 461, 368, 191, 217, 220, 1868],
+  [2024, 6, 339, 372, 334, 181, 187, 214, 1627],
+  [2024, 7, 1237, 663, 452, 571, 561, 187, 3671],
+  [2024, 8, 3739, 1413, 874, 1136, 1565, 196, 8923],
+  [2024, 9, 2831, 1105, 543, 856, 1112, 192, 6639],
+  [2024, 10, 1009, 717, 422, 419, 603, 265, 3435],
+  [2024, 11, 520, 287, 427, 157, 194, 242, 1827],
+  [2024, 12, 378, 263, 309, 134, 131, 331, 1546],
+  [2025, 1, 399, 316, 388, 211, 229, 241, 1784],
+  [2025, 2, 321, 287, 325, 178, 185, 246, 1542],
+  [2025, 3, 419, 409, 457, 227, 295, 267, 2074],
+  [2025, 4, 394, 410, 415, 186, 235, 235, 1875],
+  [2025, 5, 389, 469, 393, 227, 247, 234, 1959],
+  [2025, 6, 330, 424, 392, 179, 213, 224, 1762],
+  [2025, 7, 1420, 730, 494, 508, 572, 193, 3917],
+  [2025, 8, 3187, 1218, 721, 900, 1434, 195, 7655],
+  [2025, 9, 3345, 1232, 689, 827, 1238, 243, 7574],
+  [2025, 10, 1136, 799, 526, 511, 597, 277, 3846],
+  [2025, 11, 477, 311, 487, 172, 231, 291, 1969],
+  [2025, 12, 380, 274, 350, 137, 141, 367, 1649],
+];
+
+const keys = ["Cahiers", "Classeurs", "Ecriture", "Technique", "Manuels", "Bureau", "Total"];
+const labels = { Ecriture: "Écriture" };
+let rows = buildRows(rawRows);
+
+const state = {
+  family: "Total",
+  method: "ols",
+  modelType: "multiplicative",
+  scenario: 0,
+};
+
+const els = {
+  fileInput: document.querySelector("#fileInput"),
+  importStatus: document.querySelector("#importStatus"),
+  familySelect: document.querySelector("#familySelect"),
+  methodSelect: document.querySelector("#methodSelect"),
+  modelType: document.querySelector("#modelType"),
+  scenarioRange: document.querySelector("#scenarioRange"),
+  scenarioValue: document.querySelector("#scenarioValue"),
+  viewTitle: document.querySelector("#viewTitle"),
+  actual2025: document.querySelector("#actual2025"),
+  forecast2026: document.querySelector("#forecast2026"),
+  growthRate: document.querySelector("#growthRate"),
+  range2026: document.querySelector("#range2026"),
+  forecastChart: document.querySelector("#forecastChart"),
+  forecastRows: document.querySelector("#forecastRows"),
+  errorRows: document.querySelector("#errorRows"),
+  loadedRows: document.querySelector("#loadedRows"),
+  familyCount: document.querySelector("#familyCount"),
+  activeMethod: document.querySelector("#activeMethod"),
+  bestSeasonalModel: document.querySelector("#bestSeasonalModel"),
+  modelTestMeta: document.querySelector("#modelTestMeta"),
+  modelComparisonRows: document.querySelector("#modelComparisonRows"),
+  modelDecision: document.querySelector("#modelDecision"),
+  methodologyText: document.querySelector("#methodologyText"),
+  outliers: document.querySelector("#outliers"),
+  recommendation: document.querySelector("#recommendation"),
+  peakMonth: document.querySelector("#peakMonth"),
+  scenarioLabel: document.querySelector("#scenarioLabel"),
+  exportCsv: document.querySelector("#exportCsv"),
+  exportPdf: document.querySelector("#exportPdf"),
+};
+
+keys.forEach((key) => {
+  const option = document.createElement("option");
+  option.value = key;
+  option.textContent = key === "Total" ? "Ventes totales" : display(key);
+  els.familySelect.append(option);
+});
+
+function buildRows(source) {
+  return source.map((r, i) => ({
+    year: r[0],
+    month: r[1],
+    monthName: monthNames[r[1] - 1],
+    t: i + 1,
+    Cahiers: r[2],
+    Classeurs: r[3],
+    Ecriture: r[4],
+    Technique: r[5],
+    Manuels: r[6],
+    Bureau: r[7],
+    Total: r[8],
+  }));
+}
+
+function display(key) {
+  return labels[key] || key;
+}
+
+function fmt(value, decimals = 0) {
+  return new Intl.NumberFormat("fr-FR", {
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals,
+  }).format(value);
+}
+
+function mean(values) {
+  return values.reduce((a, b) => a + b, 0) / values.length;
+}
+
+function stdev(values) {
+  if (values.length < 2) return 0;
+  const m = mean(values);
+  return Math.sqrt(values.reduce((s, v) => s + (v - m) ** 2, 0) / (values.length - 1));
+}
+
+function ols(x, y) {
+  const mx = mean(x);
+  const my = mean(y);
+  const b = x.reduce((s, xi, i) => s + (xi - mx) * (y[i] - my), 0) / x.reduce((s, xi) => s + (xi - mx) ** 2, 0);
+  return { a: my - b * mx, b };
+}
+
+function centeredMovingAverage(values) {
+  const ma12 = [];
+  for (let i = 0; i <= values.length - 12; i += 1) {
+    ma12.push(mean(values.slice(i, i + 12)));
+  }
+  const cma = Array(values.length).fill(null);
+  for (let i = 6; i <= values.length - 7; i += 1) {
+    cma[i] = (ma12[i - 6] + ma12[i - 5]) / 2;
+  }
+  return cma;
+}
+
+function seasonalCoefficients(values, modelType) {
+  const cma = centeredMovingAverage(values);
+  const buckets = Array.from({ length: 12 }, () => []);
+  values.forEach((v, i) => {
+    if (cma[i]) {
+      buckets[rows[i].month - 1].push(modelType === "multiplicative" ? v / cma[i] : v - cma[i]);
+    }
+  });
+  let coeffs = buckets.map((bucket) => (bucket.length ? mean(bucket) : modelType === "multiplicative" ? 1 : 0));
+  if (modelType === "multiplicative") {
+    const normalizer = 12 / coeffs.reduce((a, b) => a + b, 0);
+    coeffs = coeffs.map((c) => c * normalizer);
+  } else {
+    const offset = mean(coeffs);
+    coeffs = coeffs.map((c) => c - offset);
+  }
+  return coeffs;
+}
+
+function applySeason(trend, coeff, modelType) {
+  return modelType === "multiplicative" ? trend * coeff : trend + coeff;
+}
+
+function removeSeason(value, coeff, modelType) {
+  return modelType === "multiplicative" ? value / coeff : value - coeff;
+}
+
+function fitModel(method, family, modelType) {
+  const values = rows.map((r) => r[family]);
+  const coeffs = seasonalCoefficients(values, modelType);
+  const deseason = values.map((v, i) => removeSeason(v, coeffs[rows[i].month - 1], modelType));
+  const t = rows.map((r) => r.t);
+  const fitted = Array(values.length).fill(null);
+  const forecast = [];
+  let trendAt = () => 0;
+
+  if (method === "ols") {
+    const line = ols(t, deseason);
+    trendAt = (period) => line.a + line.b * period;
+    values.forEach((_, i) => {
+      fitted[i] = applySeason(trendAt(rows[i].t), coeffs[rows[i].month - 1], modelType);
+    });
+  }
+
+  if (method === "ma") {
+    const cma = centeredMovingAverage(deseason);
+    const usable = cma.map((v, i) => ({ t: rows[i].t, v })).filter((p) => p.v);
+    const line = ols(usable.map((p) => p.t), usable.map((p) => p.v));
+    trendAt = (period) => line.a + line.b * period;
+    values.forEach((_, i) => {
+      if (cma[i]) fitted[i] = applySeason(cma[i], coeffs[rows[i].month - 1], modelType);
+    });
+  }
+
+  if (method === "exp") {
+    const alpha = 0.35;
+    const beta = 0.15;
+    let level = deseason[0];
+    let trend = deseason[1] - deseason[0];
+    deseason.forEach((value, i) => {
+      if (i > 0) {
+        const oldLevel = level;
+        level = alpha * value + (1 - alpha) * (level + trend);
+        trend = beta * (level - oldLevel) + (1 - beta) * trend;
+      }
+      fitted[i] = applySeason(level, coeffs[rows[i].month - 1], modelType);
+    });
+    trendAt = (period) => level + (period - rows.length) * trend;
+  }
+
+  for (let h = 1; h <= 12; h += 1) {
+    const period = rows.length + h;
+    const month = ((rows.at(-1).month + h - 1) % 12) + 1;
+    const base = Math.max(0, applySeason(trendAt(period), coeffs[month - 1], modelType));
+    forecast.push({
+      year: rows.at(-1).year + Math.floor((rows.at(-1).month + h - 1) / 12),
+      month,
+      monthName: monthNames[month - 1],
+      seasonal: coeffs[month - 1],
+      forecast: base,
+    });
+  }
+
+  const errors = values
+    .map((actual, i) => ({ actual, fitted: fitted[i], row: rows[i] }))
+    .filter((p) => p.fitted && Number.isFinite(p.fitted));
+  const residuals = errors.map((p) => p.actual - p.fitted);
+  const sigma = stdev(residuals);
+  forecast.forEach((p) => {
+    p.low = Math.max(0, p.forecast - 1.64 * sigma);
+    p.high = p.forecast + 1.64 * sigma;
+  });
+  return { values, fitted, forecast, coeffs, sigma, errors, residuals };
+}
+
+function metrics(method, modelType = state.modelType) {
+  const model = fitModel(method, state.family, modelType);
+  const rmse = Math.sqrt(mean(model.errors.map((p) => (p.actual - p.fitted) ** 2)));
+  const mape = mean(model.errors.map((p) => Math.abs((p.actual - p.fitted) / p.actual))) * 100;
+  return { method, modelType, rmse, mape, sigma: model.sigma, n: model.errors.length };
+}
+
+function compareSeasonalModels() {
+  return ["multiplicative", "additive"]
+    .map((modelType) => metrics(state.method, modelType))
+    .sort((a, b) => a.rmse - b.rmse);
+}
+
+function seasonalModelLabel(modelType) {
+  return modelType === "multiplicative" ? "Multiplicatif" : "Additif";
+}
+
+function methodLabel(method = state.method) {
+  const names = {
+    ols: "MCO + saisonnalité",
+    ma: "Moyenne mobile centrée",
+    exp: "Lissage exponentiel",
+  };
+  return names[method] || method;
+}
+
+function adjustedForecast() {
+  const factor = 1 + state.scenario / 100;
+  return fitModel(state.method, state.family, state.modelType).forecast.map((p) => ({
+    ...p,
+    forecast: p.forecast * factor,
+    low: p.low * factor,
+    high: p.high * factor,
+  }));
+}
+
+function selectedModel() {
+  return fitModel(state.method, state.family, state.modelType);
+}
+
+function renderSummary() {
+  const forecast = adjustedForecast();
+  const total2026 = forecast.reduce((s, p) => s + p.forecast, 0);
+  const low = forecast.reduce((s, p) => s + p.low, 0);
+  const high = forecast.reduce((s, p) => s + p.high, 0);
+  const actual2025 = rows.filter((r) => r.year === 2025).reduce((s, r) => s + r[state.family], 0);
+  const growth = (total2026 / actual2025 - 1) * 100;
+  const peak = forecast.reduce((best, p) => (p.forecast > best.forecast ? p : best), forecast[0]);
+
+  els.viewTitle.textContent = state.family === "Total" ? "Ventes totales" : `Famille ${display(state.family)}`;
+  els.actual2025.textContent = fmt(actual2025);
+  els.forecast2026.textContent = fmt(total2026);
+  els.growthRate.textContent = `${growth >= 0 ? "+" : ""}${fmt(growth, 1)} %`;
+  els.range2026.textContent = `${fmt(low)} - ${fmt(high)}`;
+  els.peakMonth.textContent = `Pic prévu : ${peak.monthName} (${fmt(peak.forecast)} kMAD)`;
+  els.scenarioValue.textContent = `${state.scenario > 0 ? "+" : ""}${state.scenario} %`;
+  els.scenarioLabel.textContent = state.scenario === 0 ? "Scénario central" : `Scénario ${state.scenario > 0 ? "+" : ""}${state.scenario} %`;
+  els.recommendation.textContent =
+    state.modelType === "multiplicative"
+      ? "Multiplicatif recommandé : les pics augmentent avec le niveau des ventes"
+      : "Modèle additif affiché pour comparaison";
+}
+
+function renderDashboardStrip() {
+  const comparison = compareSeasonalModels();
+  const best = comparison[0];
+  const second = comparison[1];
+  const gain = second && second.rmse ? ((second.rmse - best.rmse) / second.rmse) * 100 : 0;
+  els.loadedRows.textContent = `${rows.length} observations chargées`;
+  els.familyCount.textContent = `${keys.length - 1} familles de produits`;
+  els.activeMethod.textContent = methodLabel();
+  els.bestSeasonalModel.textContent = `${seasonalModelLabel(best.modelType)} (${fmt(gain, 1)} % mieux)`;
+}
+
+function renderTable() {
+  els.forecastRows.innerHTML = "";
+  adjustedForecast().forEach((p) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.monthName}</td>
+      <td>${fmt(p.forecast, 1)}</td>
+      <td>${fmt(p.low, 1)}</td>
+      <td>${fmt(p.high, 1)}</td>
+      <td>${state.modelType === "multiplicative" ? fmt(p.seasonal, 3) : fmt(p.seasonal, 1)}</td>
+    `;
+    els.forecastRows.append(tr);
+  });
+}
+
+function renderMethodology() {
+  const text =
+    "La série présente une saisonnalité proportionnelle au niveau d'activité : les pics de rentrée deviennent plus élevés lorsque la tendance progresse. Le modèle multiplicatif est donc privilégié, tandis que le modèle additif reste disponible pour comparaison.";
+  els.methodologyText.textContent = text;
+  const model = selectedModel();
+  const sigma = model.sigma || 1;
+  const outliers = model.errors
+    .map((p) => ({ ...p, z: Math.abs((p.actual - p.fitted) / sigma) }))
+    .filter((p) => p.z >= 2)
+    .sort((a, b) => b.z - a.z)
+    .slice(0, 4);
+  els.outliers.innerHTML = outliers.length
+    ? outliers
+        .map((p) => `<span class="tag">${p.row.monthName} ${p.row.year} : ${fmt(p.actual)} kMAD</span>`)
+        .join("")
+    : '<span class="tag">Aucune atypie majeure détectée</span>';
+}
+
+function renderErrors() {
+  const names = {
+    ols: "Moindres carrés ordinaires",
+    ma: "Moyenne mobile centrée",
+    exp: "Lissage exponentiel",
+  };
+  els.errorRows.innerHTML = ["ols", "ma", "exp"]
+    .map(metrics)
+    .sort((a, b) => a.rmse - b.rmse)
+    .map(
+      (m) => `
+      <tr>
+        <td>${names[m.method]}</td>
+        <td>${fmt(m.rmse, 1)}</td>
+        <td>${fmt(m.mape, 1)} %</td>
+      </tr>
+    `,
+    )
+    .join("");
+}
+
+function renderModelComparison() {
+  const comparison = compareSeasonalModels();
+  const best = comparison[0];
+  const second = comparison[1];
+  const gain = second && second.rmse ? ((second.rmse - best.rmse) / second.rmse) * 100 : 0;
+  const isClear = Math.abs(gain) >= 2;
+  els.modelTestMeta.textContent = `${display(state.family)} - ${methodLabel()}`;
+  els.modelComparisonRows.innerHTML = comparison
+    .map((m, idx) => {
+      const decision = idx === 0 ? '<span class="model-winner">Retenu</span>' : "Comparatif";
+      return `
+      <tr>
+        <td>${seasonalModelLabel(m.modelType)}</td>
+        <td>${fmt(m.rmse, 1)}</td>
+        <td>${fmt(m.mape, 1)} %</td>
+        <td>${fmt(m.sigma, 1)}</td>
+        <td>${decision}</td>
+      </tr>
+    `;
+    })
+    .join("");
+
+  els.modelDecision.textContent = isClear
+    ? `Le modèle ${seasonalModelLabel(best.modelType).toLowerCase()} est retenu pour la famille ${display(state.family)} avec un RMSE inférieur de ${fmt(gain, 1)} % par rapport au modèle ${seasonalModelLabel(second.modelType).toLowerCase()}.`
+    : `Les deux modèles donnent des performances proches pour la famille ${display(state.family)}. Le modèle ${seasonalModelLabel(best.modelType).toLowerCase()} reste légèrement meilleur selon le RMSE, mais l'écart doit être interprété avec prudence.`;
+}
+
+function drawChart() {
+  const canvas = els.forecastChart;
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+  canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = rect.width;
+  const h = rect.height;
+  const pad = { left: 72, right: 24, top: 26, bottom: 50 };
+  const hist = rows.map((r) => ({ label: `${r.monthName.slice(0, 3)} ${String(r.year).slice(2)}`, value: r[state.family], kind: "historique" }));
+  const fc = adjustedForecast().map((p) => ({ label: p.monthName.slice(0, 3), value: p.forecast, low: p.low, high: p.high, kind: "prévision" }));
+  const series = [...hist, ...fc];
+  const max = Math.max(...series.map((p) => p.high || p.value)) * 1.12;
+  const innerW = w - pad.left - pad.right;
+  const innerH = h - pad.top - pad.bottom;
+  const x = (i) => pad.left + (i / (series.length - 1)) * innerW;
+  const y = (v) => pad.top + innerH - (v / max) * innerH;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, w, h);
+  ctx.font = "11px Inter, system-ui, sans-serif";
+
+  // Grid lines
+  for (let i = 0; i <= 4; i++) {
+    const v = (max / 4) * i;
+    const yy = y(v);
+    ctx.strokeStyle = "rgba(198,208,221,0.85)";
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, yy);
+    ctx.lineTo(w - pad.right, yy);
+    ctx.stroke();
+    ctx.fillStyle = "#667085";
+    ctx.textAlign = "right";
+    ctx.fillText(fmt(v), pad.left - 8, yy + 4);
+  }
+
+  // Confidence band
+  ctx.fillStyle = "rgba(31,122,140,0.10)";
+  ctx.beginPath();
+  fc.forEach((p, i) => {
+    const px = x(hist.length + i);
+    if (i === 0) ctx.moveTo(px, y(p.high));
+    else ctx.lineTo(px, y(p.high));
+  });
+  [...fc].reverse().forEach((p, i) => ctx.lineTo(x(series.length - 1 - i), y(p.low)));
+  ctx.closePath();
+  ctx.fill();
+
+  // Historical line
+  line(ctx, hist.map((p, i) => ({ ...p, i })), x, y, "#344054", 2);
+  // Forecast line
+  line(ctx, fc.map((p, i) => ({ ...p, i: hist.length + i })), x, y, "#1f7a8c", 2.5);
+
+  // Separator line
+  ctx.strokeStyle = "rgba(183,121,31,0.55)";
+  ctx.setLineDash([5, 5]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x(hist.length - 0.5), pad.top);
+  ctx.lineTo(x(hist.length - 0.5), h - pad.bottom);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // X-axis labels
+  series.forEach((p, i) => {
+    if (i % 6 === 0 || i >= hist.length) {
+      ctx.save();
+      ctx.translate(x(i), h - 16);
+      ctx.rotate(-0.45);
+      ctx.textAlign = "right";
+      ctx.fillStyle = i >= hist.length ? "#1f7a8c" : "#667085";
+      ctx.font = i >= hist.length ? "bold 11px Inter,sans-serif" : "11px Inter,sans-serif";
+      ctx.fillText(p.label, 0, 0);
+      ctx.restore();
+    }
+  });
+
+  // Legend
+  ctx.fillStyle = "#344054";
+  ctx.fillRect(w - 210, 14, 10, 10);
+  ctx.fillStyle = "#667085";
+  ctx.textAlign = "left";
+  ctx.font = "11px Inter,sans-serif";
+  ctx.fillText("Observé", w - 194, 23);
+  ctx.fillStyle = "#1f7a8c";
+  ctx.fillRect(w - 120, 14, 10, 10);
+  ctx.fillStyle = "#667085";
+  ctx.fillText("Prévision", w - 104, 23);
+}
+
+function line(ctx, points, x, y, color, width) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.beginPath();
+  points.forEach((p, idx) => {
+    if (idx === 0) ctx.moveTo(x(p.i), y(p.value));
+    else ctx.lineTo(x(p.i), y(p.value));
+  });
+  ctx.stroke();
+}
+
+function parseCsv(text) {
+  const delimiter = text.includes(";") ? ";" : ",";
+  const lines = text.trim().split(/\r?\n/).map((l) => l.split(delimiter).map((c) => c.trim()));
+  const headers = lines.shift().map((h) => h.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
+  const find = (names) => names.map((n) => headers.indexOf(n)).find((i) => i >= 0);
+  const year = find(["annee", "year"]);
+  const month = find(["mois", "month"]);
+  const total = find(["total", "ventes", "ventes (kmad)"]);
+  if (year < 0 || month < 0 || total < 0) throw new Error("Colonnes minimales attendues : Année, Mois, Total.");
+  rows = lines
+    .filter((r) => r.length > total)
+    .map((r, i) => ({
+      year: Number(r[year]),
+      month: Number(r[month]),
+      monthName: monthNames[Number(r[month]) - 1],
+      t: i + 1,
+      Cahiers: Number(r[find(["cahiers"])] || 0),
+      Classeurs: Number(r[find(["classeurs"])] || 0),
+      Ecriture: Number(r[find(["ecriture"])] || 0),
+      Technique: Number(r[find(["technique"])] || 0),
+      Manuels: Number(r[find(["manuels"])] || 0),
+      Bureau: Number(r[find(["bureau"])] || 0),
+      Total: Number(r[total]),
+    }))
+    .filter((r) => r.year && r.month && r.Total);
+  if (rows.length < 24) throw new Error("Au moins 24 mois d'historique sont nécessaires.");
+}
+
+function exportCsv() {
+  const lines = [["Famille", "Mois", "Prévision_kMAD", "Bas_kMAD", "Haut_kMAD", "Méthode", "Modèle", "Scénario"]];
+  adjustedForecast().forEach((p) => {
+    lines.push([display(state.family), p.monthName, p.forecast.toFixed(1), p.low.toFixed(1), p.high.toFixed(1), state.method, state.modelType, `${state.scenario}%`]);
+  });
+  download(lines.map((r) => r.join(";")).join("\n"), "papetis_previsions_2026.csv", "text/csv");
+}
+
+function exportPdf() {
+  const image = els.forecastChart.toDataURL("image/png");
+  const forecastTotal = els.forecast2026.textContent;
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <html lang="fr"><head><title>Rapport PAPETIS</title>
+    <style>body{font-family:Arial,sans-serif;padding:28px;color:#172026} h1{margin-bottom:4px} table{border-collapse:collapse;width:100%;margin-top:18px}td,th{border:1px solid #ccd6dc;padding:8px;text-align:right}td:first-child,th:first-child{text-align:left} img{width:100%;max-width:900px;border:1px solid #ccd6dc}.note{color:#60717c}</style>
+    </head><body>
+    <h1>Rapport synthétique - Prévisions 2026 PAPETIS</h1>
+    <p class="note">Méthode : ${els.methodSelect.selectedOptions[0].textContent}. Modèle : ${els.modelType.selectedOptions[0].textContent}.</p>
+    <p><strong>Prévision annuelle 2026 :</strong> ${forecastTotal} kMAD pour ${display(state.family)}.</p>
+    <img src="${image}" alt="Graphique des prévisions" />
+    <table>${document.querySelector("#forecastRows").closest("table").innerHTML}</table>
+    <script>window.onload=()=>window.print();<\/script>
+    </body></html>
+  `);
+  win.document.close();
+}
+
+function download(content, filename, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function render() {
+  renderSummary();
+  renderDashboardStrip();
+  renderTable();
+  renderErrors();
+  renderModelComparison();
+  renderMethodology();
+  drawChart();
+}
+
+els.familySelect.addEventListener("change", (e) => {
+  state.family = e.target.value;
+  render();
+});
+els.methodSelect.addEventListener("change", (e) => {
+  state.method = e.target.value;
+  render();
+});
+els.modelType.addEventListener("change", (e) => {
+  state.modelType = e.target.value;
+  render();
+});
+els.scenarioRange.addEventListener("input", (e) => {
+  state.scenario = Number(e.target.value);
+  render();
+});
+els.fileInput.addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    parseCsv(await file.text());
+    els.importStatus.textContent = `${file.name} importé avec succès.`;
+    render();
+  } catch (error) {
+    els.importStatus.textContent = error.message;
+  }
+});
+els.exportCsv.addEventListener("click", exportCsv);
+els.exportPdf.addEventListener("click", exportPdf);
+window.addEventListener("resize", drawChart);
+
+render();
+</script>
+</body>
+</html>
